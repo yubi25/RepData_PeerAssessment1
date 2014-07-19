@@ -1,6 +1,5 @@
 # Reproducible Research: Peer Assessment 1
 
-
 ## Loading and preprocessing the data
 
 ```r
@@ -21,20 +20,10 @@ hist(dailyTotal, main = "Histogram of total steps per day", xlab = "Total steps 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
 
 ```r
-mean(dailyTotal)
+my_mean<-mean(dailyTotal)
+my_median<-median(dailyTotal)
 ```
-
-```
-## [1] 9354
-```
-
-```r
-median(dailyTotal)
-```
-
-```
-## [1] 10395
-```
+- The mean is 9354.2295 and median 1.0395 &times; 10<sup>4</sup>
 
 ## What is the average daily activity pattern?
 
@@ -47,25 +36,21 @@ plot(as.numeric(names(average_dailypat)), average_dailypat, type = "l", main = "
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
 ```r
-names(average_dailypat[average_dailypat == max(average_dailypat)])
+my_interval<-names(average_dailypat[average_dailypat == max(average_dailypat)])
 ```
-
-```
-## [1] "835"
-```
+- The 5-minute interval, on average across all the days in the dataset, containing the maximum number of steps is 835 
 
 ## Inputing missing values
 
 ```r
-nrow(my_data[is.na(my_data$steps), ])
+my_missing_values<-nrow(my_data[is.na(my_data$steps), ])
 ```
+- The total number of missing values in the dataset is 2304
+- The missign values will be filled in with the mean.
 
-```
-## [1] 2304
-```
 
 ```r
-average_steps <- sapply(split(my_data$steps, my_data$interval), function(x) x[is.na(x)] <- as.integer(median(x[!is.na(x)])))
+average_steps <- sapply(split(my_data$steps, my_data$interval), function(x) x[is.na(x)] <- as.integer(mean(x[!is.na(x)])))
 
 for (i in 1:nrow(my_data)) {
     if (is.na(my_data[i, "steps"])) {
@@ -78,23 +63,13 @@ hist(dailyTotal, main = "Histogram of total steps per day", xlab = "Total steps 
     col = "red",breaks=10)
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
 ```r
-mean(dailyTotal)
+my_new_mean<-mean(dailyTotal)
+my_new_median<-median(dailyTotal)
 ```
-
-```
-## [1] 9504
-```
-
-```r
-median(dailyTotal)
-```
-
-```
-## [1] 10395
-```
+- Imputing missing data on the estimates of the total daily number of steps changes the mean (from 9354.2295 to 1.075 &times; 10<sup>4</sup>) and median (from 1.0395 &times; 10<sup>4</sup> to 1.0641 &times; 10<sup>4</sup>). 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -120,4 +95,4 @@ xyplot(steps ~ interval | day, data = my_data, layout = c(1, 2), type = "l",
     xlab = "Interval", ylab = "Number of steps")
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png) 
